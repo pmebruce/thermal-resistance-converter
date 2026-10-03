@@ -642,3 +642,7 @@ html:lang(zh-Hant) footer {
     font-size: 1rem;
   }
 }
+
+
+/* High-contrast hero title for the dark converter theme. */
+.tool-hero h1{color:#eef7f8!important}
