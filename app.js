@@ -222,9 +222,60 @@ function renderLayers() {
       calculateStack();
     });
 
+    const remove = document.createElement("button");
+    remove.className = "delete-layer";
+    remove.type = "button";
+    remove.textContent = "移除";
+    remove.setAttribute("aria-label", "刪除第 " + (index + 1) + " 層");
+    remove.disabled = layers.length === 1;
+    remove.addEventListener("click", function() {
+      layers.splice(index, 1);
+      renderLayers();
+    });
+
+    const header = document.createElement("div");
+    header.className = "layer-card-header";
+    const number = document.createElement("strong");
+    number.className = "layer-card-number";
+    number.textContent = "第 " + (index + 1) + " 層";
+    header.append(number, remove);
+
+    function field(labelText, className, control) {
+      const wrapper = document.createElement("label");
+      wrapper.className = "layer-field " + className;
+      const label = document.createElement("span");
+      label.className = "layer-field-label";
+      label.textContent = labelText;
+      wrapper.append(label, control);
+      return wrapper;
+    }
+
+    const thicknessControl = document.createElement("div");
+    thicknessControl.className = "layer-inline-control";
+    thicknessControl.append(thickness, unit);
+
+    const kControl = document.createElement("div");
+    kControl.className = "layer-inline-control layer-k-control";
+    const kUnit = document.createElement("span");
+    kUnit.className = "layer-k-unit";
+    kUnit.textContent = "W/m·K";
+    kControl.append(k, kUnit);
+
+    const fields = document.createElement("div");
+    fields.className = "layer-card-fields";
+    fields.append(
+      field("材料名稱", "layer-name-field", name),
+      field("厚度", "layer-thickness-field", thicknessControl),
+      field("導熱係數 k", "layer-k-field", kControl)
+    );
+
     const share = document.createElement("div");
     share.className = "layer-share";
-    const shareText = document.createElement("span");
+    const shareLabel = document.createElement("span");
+    shareLabel.className = "layer-share-label";
+    shareLabel.textContent = "該層面積熱阻";
+    const shareText = document.createElement("strong");
+    shareText.className = "layer-share-value";
     const percentage = total > 0 && Number.isFinite(resistances[index]) ? resistances[index] / total * 100 : 0;
     shareText.textContent = formatNumber(resistances[index] / FACTORS.areaResistance.cin2w, 4) + " °C·in²/W · " + formatNumber(percentage, 3) + "%";
     const track = document.createElement("div");
@@ -233,20 +284,9 @@ function renderLayers() {
     fill.className = "share-fill";
     fill.style.width = Math.max(0, Math.min(100, percentage)) + "%";
     track.append(fill);
-    share.append(shareText, track);
+    share.append(shareLabel, shareText, track);
 
-    const remove = document.createElement("button");
-    remove.className = "delete-layer";
-    remove.type = "button";
-    remove.textContent = "×";
-    remove.setAttribute("aria-label", "刪除第 " + (index + 1) + " 層");
-    remove.disabled = layers.length === 1;
-    remove.addEventListener("click", function() {
-      layers.splice(index, 1);
-      renderLayers();
-    });
-
-    row.append(name, thickness, unit, k, share, remove);
+    row.append(header, fields, share);
     list.append(row);
   });
 
@@ -266,7 +306,7 @@ function updateLayerShares() {
   document.querySelectorAll("#layerList .layer-share").forEach(function(share, index) {
     const resistance = resistances[index];
     const percentage = total > 0 && Number.isFinite(resistance) ? resistance / total * 100 : 0;
-    const label = share.querySelector("span");
+    const label = share.querySelector(".layer-share-value");
     const fill = share.querySelector(".share-fill");
     if (label) label.textContent = formatNumber(resistance / FACTORS.areaResistance.cin2w, 4) + " °C·in²/W · " + formatNumber(percentage, 3) + "%";
     if (fill) fill.style.width = Math.max(0, Math.min(100, percentage)) + "%";

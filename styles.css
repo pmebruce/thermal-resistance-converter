@@ -646,3 +646,45 @@ html:lang(zh-Hant) footer {
 
 /* High-contrast hero title for the dark converter theme. */
 .tool-hero h1{color:#eef7f8!important}
+
+
+
+/* Layer card layout v2: explicit labels and a stable mobile reading order. */
+.layer-header{display:none!important}
+.layer-row{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-areas:none!important;
+  gap:13px!important;
+  padding:16px!important;
+  margin-bottom:12px!important;
+}
+.layer-card-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.layer-card-number{color:var(--teal);font-size:.82rem;letter-spacing:.08em}
+.layer-card-fields{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:11px}
+.layer-field{display:grid;gap:6px;min-width:0}
+.layer-field-label{color:var(--muted);font-size:.76rem;font-weight:700;letter-spacing:.03em}
+.layer-row .layer-field input,.layer-row .layer-field select{
+  min-width:0;width:100%;min-height:48px;margin:0;padding:10px 12px;
+  border:1px solid var(--line-strong);border-radius:11px;background:var(--surface-2);color:var(--text)
+}
+.layer-inline-control{display:grid;grid-template-columns:minmax(0,1fr) auto;min-width:0}
+.layer-inline-control .layer-thickness{border-radius:11px 0 0 11px!important}
+.layer-inline-control .layer-unit{width:82px!important;border-left:0!important;border-radius:0 11px 11px 0!important}
+.layer-k-control .layer-k{border-radius:11px 0 0 11px!important}
+.layer-k-unit{display:grid;place-items:center;min-width:76px;padding:0 10px;border:1px solid var(--line-strong);border-left:0;border-radius:0 11px 11px 0;color:#c9dde2;background:var(--surface-2);font-size:.78rem;white-space:nowrap}
+.layer-share{display:grid!important;grid-template-columns:auto 1fr;align-items:center;gap:5px 12px;padding-top:2px}
+.layer-share-label{color:var(--muted)!important;font-size:.75rem!important}
+.layer-share-value{justify-self:end;color:#dcebed;font-size:.8rem;font-weight:650;font-variant-numeric:tabular-nums}
+.layer-share .share-track{grid-column:1/-1}
+.delete-layer{width:auto!important;height:34px!important;padding:0 11px!important;border:1px solid var(--line)!important;color:var(--muted)!important;background:transparent!important;font-size:.76rem!important}
+.delete-layer:hover{color:var(--danger)!important;border-color:rgba(255,123,123,.35)!important}
+.delete-layer:disabled{visibility:hidden}
+@media(max-width:620px){
+  .layer-card-fields{grid-template-columns:1fr 1fr}
+  .layer-name-field{grid-column:1/-1}
+}
+@media(max-width:390px){
+  .layer-card-fields{grid-template-columns:1fr}
+  .layer-name-field{grid-column:auto}
+}
